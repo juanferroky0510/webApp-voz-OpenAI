@@ -1,5 +1,6 @@
 const estado = document.getElementById("estado");
 const resultado = document.getElementById("resultado");
+const btnEmpezar = document.getElementById("btnEmpezar");
 
 let API_KEY = ""; // <- ahora se cargará desde MockAPI
 
@@ -98,13 +99,36 @@ recognition.onresult = async (event) => {
     resultado.textContent = orden;
 };
 
-// ---------- INICIO CONTROLADO ----------
+
+// ---------- INICIO CONTROLADO CON BOTÓN ----------
 async function iniciarApp() {
-    estado.textContent = "🟡 Cargando configuración...";
-    await obtenerApiKey();   // primero trae la key
-    estado.textContent = "🟢 Escuchando...";
-    recognition.start();     // luego inicia voz
-    resetTimer();
+
+    btnEmpezar.addEventListener("click", async () => {
+
+        // Ocultar botón
+        btnEmpezar.style.display = "none";
+
+        estado.textContent = "🟡 Cargando configuración...";
+
+        // Cargar API KEY
+        await obtenerApiKey();
+
+        // Reproducir audio
+        const audio = new Audio("audios/presentacion.wav");
+
+        try {
+            await audio.play();
+        } catch (error) {
+            console.log("Error al reproducir audio:", error);
+        }
+
+        // Cuando termine el audio → activar micrófono
+        audio.onended = () => {
+            estado.textContent = "🟢 Escuchando...";
+            recognition.start();
+            resetTimer();
+        };
+    });
 }
 
 iniciarApp();
