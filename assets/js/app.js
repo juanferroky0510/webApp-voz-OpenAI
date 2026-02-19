@@ -114,7 +114,7 @@ async function iniciarApp() {
         await obtenerApiKey();
 
         // Reproducir audio
-        const audio = new Audio("audios/presentacion.wav");
+        const audio = new Audio("assets/audios/presentacion.wav");
 
         try {
             await audio.play();
